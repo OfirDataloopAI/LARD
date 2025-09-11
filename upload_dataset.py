@@ -62,14 +62,130 @@ csv_attributes_keys_map = {
 #######################
 # YAML Attributes map #
 #######################
-yaml_attributes_types_map = {}
-yaml_attributes_keys_map = {}
+yaml_attributes_types_map = {
+    "fov": dl.AttributesTypes.NUMBER,
+    "pose.0": dl.AttributesTypes.NUMBER,
+    "pose.1": dl.AttributesTypes.NUMBER,
+    "pose.2": dl.AttributesTypes.NUMBER,
+    "pose.3": dl.AttributesTypes.NUMBER,
+    "pose.4": dl.AttributesTypes.NUMBER,
+    "pose.5": dl.AttributesTypes.NUMBER,
+}
+yaml_attributes_keys_map = {
+    "fov": 21,
+    "pose.0": 22,
+    "pose.1": 23,
+    "pose.2": 24,
+    "pose.3": 25,
+    "pose.4": 26,
+    "pose.5": 27,
+}
 
 ######################
 # ESP Attributes map #
 ######################
-esp_attributes_types_map = {}
-esp_attributes_keys_map = {}
+esp_attributes_types_map = {
+    "modelVersion": dl.AttributesTypes.NUMBER,
+    "frameRate": dl.AttributesTypes.NUMBER,
+    "duration": dl.AttributesTypes.NUMBER,
+    "timeFormat": dl.AttributesTypes.FREE_TEXT,
+    "animationModel.roving": dl.AttributesTypes.BOOLEAN,
+    "animationModel.logarithmic": dl.AttributesTypes.BOOLEAN,
+    "animationModel.groupedPosition": dl.AttributesTypes.BOOLEAN,
+    "longitude.relative": dl.AttributesTypes.NUMBER,
+    "longitude.time": dl.AttributesTypes.NUMBER,
+    "longitude.value": dl.AttributesTypes.NUMBER,
+    "latitude.relative": dl.AttributesTypes.NUMBER,
+    "latitude.time": dl.AttributesTypes.NUMBER,
+    "latitude.value": dl.AttributesTypes.NUMBER,
+    "altitude.relative": dl.AttributesTypes.NUMBER,
+    "altitude.logarithmic": dl.AttributesTypes.BOOLEAN,
+    "altitude.time": dl.AttributesTypes.NUMBER,
+    "altitude.value": dl.AttributesTypes.NUMBER,
+    "rotationX.maxValueRange": dl.AttributesTypes.NUMBER,
+    "rotationX.minValueRange": dl.AttributesTypes.NUMBER,
+    "rotationX.relative": dl.AttributesTypes.NUMBER,
+    "rotationX.time": dl.AttributesTypes.NUMBER,
+    "rotationX.value": dl.AttributesTypes.NUMBER,
+    "rotationY.relative": dl.AttributesTypes.NUMBER,
+    "rotationY.time": dl.AttributesTypes.NUMBER,
+    "rotationY.value": dl.AttributesTypes.NUMBER,
+    "rotationZ.minValueRange": dl.AttributesTypes.NUMBER,
+    "rotationZ.relative": dl.AttributesTypes.NUMBER,
+    "rotationZ.time": dl.AttributesTypes.NUMBER,
+    "rotationZ.value": dl.AttributesTypes.NUMBER,
+    "fov.relative": dl.AttributesTypes.NUMBER,
+    "fov.time": dl.AttributesTypes.NUMBER,
+    "fov.value": dl.AttributesTypes.NUMBER,
+    "sunVisibility.relative": dl.AttributesTypes.NUMBER,
+    "worldTime.maxValueRange": dl.AttributesTypes.NUMBER,
+    "worldTime.minValueRange": dl.AttributesTypes.NUMBER,
+    "worldTime.relative": dl.AttributesTypes.NUMBER,
+    "worldTime.time": dl.AttributesTypes.NUMBER,
+    "worldTime.value": dl.AttributesTypes.NUMBER,
+    "cloudVisibility.time": dl.AttributesTypes.NUMBER,
+    "cloudVisibility.value": dl.AttributesTypes.NUMBER,
+    "clouddate.maxValueRange": dl.AttributesTypes.NUMBER,
+    "clouddate.minValueRange": dl.AttributesTypes.NUMBER,
+    "clouddate.relative": dl.AttributesTypes.NUMBER,
+    "starsEnabled.relative": dl.AttributesTypes.NUMBER,
+    "seawaterGroup.influence.relative": dl.AttributesTypes.NUMBER,
+    "buildingsEnabled.time": dl.AttributesTypes.NUMBER,
+    "buildingsEnabled.value": dl.AttributesTypes.NUMBER,
+    "cameraExport.logarithmic": dl.AttributesTypes.BOOLEAN,
+    "cameraExport.modelVersion": dl.AttributesTypes.NUMBER,
+}
+esp_attributes_keys_map = {
+    "modelVersion": 28,
+    "frameRate": 29,
+    "duration": 30,
+    "timeFormat": 31,
+    "animationModel.roving": 32,
+    "animationModel.logarithmic": 33,
+    "animationModel.groupedPosition": 34,
+    "longitude.relative": 35,
+    "longitude.time": 36,
+    "longitude.value": 37,
+    "latitude.relative": 38,
+    "latitude.time": 39,
+    "latitude.value": 40,
+    "altitude.relative": 41,
+    "altitude.logarithmic": 42,
+    "altitude.time": 43,
+    "altitude.value": 44,
+    "rotationX.maxValueRange": 45,
+    "rotationX.minValueRange": 46,
+    "rotationX.relative": 47,
+    "rotationX.time": 48,
+    "rotationX.value": 49,
+    "rotationY.relative": 50,
+    "rotationY.time": 51,
+    "rotationY.value": 52,
+    "rotationZ.minValueRange": 53,
+    "rotationZ.relative": 54,
+    "rotationZ.time": 55,
+    "rotationZ.value": 56,
+    "fov.relative": 57,
+    "fov.time": 58,
+    "fov.value": 59,
+    "sunVisibility.relative": 60,
+    "worldTime.maxValueRange": 61,
+    "worldTime.minValueRange": 62,
+    "worldTime.relative": 63,
+    "worldTime.time": 64,
+    "worldTime.value": 65,
+    "cloudVisibility.time": 66,
+    "cloudVisibility.value": 67,
+    "clouddate.maxValueRange": 68,
+    "clouddate.minValueRange": 69,
+    "clouddate.relative": 70,
+    "starsEnabled.relative": 71,
+    "seawaterGroup.influence.relative": 72,
+    "buildingsEnabled.time": 73,
+    "buildingsEnabled.value": 74,
+    "cameraExport.logarithmic": 75,
+    "cameraExport.modelVersion": 76,
+}
 
 
 def sort_function(x: pathlib.Path):
@@ -345,9 +461,23 @@ def upload_dataset(dataset: dl.Dataset, data_path: str, num_images: int):
             scope=csv_label_list,
         )
 
-    # TODO: Updating YAML attributes
+    # Updating YAML attributes
+    for attribute_key_name, attribute_type in yaml_attributes_types_map.items():
+        ontology.update_attributes(
+            title=attribute_key_name,
+            key=yaml_attributes_keys_map[attribute_key_name],
+            attribute_type=str(attribute_type),
+            scope=[yaml_label],
+        )
 
-    # TODO: Updating ESP attributes
+    # Updating ESP attributes
+    for attribute_key_name, attribute_type in esp_attributes_types_map.items():
+        ontology.update_attributes(
+            title=attribute_key_name,
+            key=esp_attributes_keys_map[attribute_key_name],
+            attribute_type=str(attribute_type),
+            scope=[esp_label],
+        )
 
 
 def main():
