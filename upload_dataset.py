@@ -89,9 +89,9 @@ esp_attributes_types_map = {
     "frameRate": dl.AttributesTypes.NUMBER,
     "duration": dl.AttributesTypes.NUMBER,
     "timeFormat": dl.AttributesTypes.FREE_TEXT,
-    "animationModel.roving": dl.AttributesTypes.BOOLEAN,
-    "animationModel.logarithmic": dl.AttributesTypes.BOOLEAN,
-    "animationModel.groupedPosition": dl.AttributesTypes.BOOLEAN,
+    "animationModel.roving": dl.AttributesTypes.YES_NO,
+    "animationModel.logarithmic": dl.AttributesTypes.YES_NO,
+    "animationModel.groupedPosition": dl.AttributesTypes.YES_NO,
     "longitude.relative": dl.AttributesTypes.NUMBER,
     "longitude.time": dl.AttributesTypes.NUMBER,
     "longitude.value": dl.AttributesTypes.NUMBER,
@@ -99,7 +99,7 @@ esp_attributes_types_map = {
     "latitude.time": dl.AttributesTypes.NUMBER,
     "latitude.value": dl.AttributesTypes.NUMBER,
     "altitude.relative": dl.AttributesTypes.NUMBER,
-    "altitude.logarithmic": dl.AttributesTypes.BOOLEAN,
+    "altitude.logarithmic": dl.AttributesTypes.YES_NO,
     "altitude.time": dl.AttributesTypes.NUMBER,
     "altitude.value": dl.AttributesTypes.NUMBER,
     "rotationX.maxValueRange": dl.AttributesTypes.NUMBER,
@@ -132,7 +132,7 @@ esp_attributes_types_map = {
     "seawaterGroup.influence.relative": dl.AttributesTypes.NUMBER,
     "buildingsEnabled.time": dl.AttributesTypes.NUMBER,
     "buildingsEnabled.value": dl.AttributesTypes.NUMBER,
-    "cameraExport.logarithmic": dl.AttributesTypes.BOOLEAN,
+    "cameraExport.logarithmic": dl.AttributesTypes.YES_NO,
     "cameraExport.modelVersion": dl.AttributesTypes.NUMBER,
 }
 esp_attributes_keys_map = {
@@ -483,7 +483,7 @@ def upload_dataset(dataset: dl.Dataset, data_path: str, num_images: int):
 def main():
     dataset_id = "68c28dae5d72d76d05b2ea79"
     data_path = "downloads/LARD_train_VABB"
-    num_images = 10
+    num_images = 200
 
     dataset = dl.datasets.get(dataset_id=dataset_id)
     upload_dataset(dataset, data_path, num_images)
