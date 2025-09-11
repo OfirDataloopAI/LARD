@@ -100,8 +100,8 @@ def upload_dataset(dataset: dl.Dataset, data_path: str, num_images: int):
         csv_attributes = {}
         for attribute_key_name, attribute_key_id in csv_attributes_keys_map.items():
             csv_attributes[attribute_key_id] = image_row_data[attribute_key_name]
-        classification = dl.Classification(label=csv_label, attributes=csv_attributes)
-        annotations.add(annotation_definition=classification)
+        csv_classification = dl.Classification(label=csv_label, attributes=csv_attributes)
+        annotations.add(annotation_definition=csv_classification)
 
         ########################
         # Annotation from YAML #
@@ -132,8 +132,8 @@ def upload_dataset(dataset: dl.Dataset, data_path: str, num_images: int):
         # yaml_attributes["time.month"] = pose_info["time"]["month"]
         # yaml_attributes["time.second"] = pose_info["time"]["second"]
         # yaml_attributes["time.year"] = pose_info["time"]["year"]
-        classification = dl.Classification(label=yaml_label, attributes=yaml_attributes)
-        annotations.add(annotation_definition=classification)
+        yaml_classification = dl.Classification(label=yaml_label, attributes=yaml_attributes)
+        annotations.add(annotation_definition=yaml_classification)
 
         ####################### 
         # Annotation from ESP #
@@ -152,7 +152,11 @@ def upload_dataset(dataset: dl.Dataset, data_path: str, num_images: int):
             "animationModel.roving": esp_data["scenes"][0]["animationModel"]["roving"],
             "animationModel.logarithmic": esp_data["scenes"][0]["animationModel"]["logarithmic"],
             "animationModel.groupedPosition": esp_data["scenes"][0]["animationModel"]["groupedPosition"],
-            # 'attributes' placeholder
+
+            ###############################
+            # 'scene[0].attributes' start #
+            ###############################
+
             "longitude.relative": esp_data["scenes"][0]["attributes"][0]["attributes"][0]["attributes"][0]["attributes"][0]["value"]["relative"],
             "longitude.time": esp_data["scenes"][0]["attributes"][0]["attributes"][0]["attributes"][0]["attributes"][0]["keyframes"][image_idx]["time"],
             "longitude.value": esp_data["scenes"][0]["attributes"][0]["attributes"][0]["attributes"][0]["attributes"][0]["keyframes"][image_idx]["value"],
@@ -231,11 +235,15 @@ def upload_dataset(dataset: dl.Dataset, data_path: str, num_images: int):
             "buildingsEnabled.time": esp_data["scenes"][0]["attributes"][1]["attributes"][4]["keyframes"][image_idx]["time"],
             "buildingsEnabled.value": esp_data["scenes"][0]["attributes"][1]["attributes"][4]["keyframes"][image_idx]["value"],
 
-            # 'attributes' placeholder
+            #############################
+            # 'scene[0].attributes' end #
+            #############################
+
             "cameraExport.logarithmic": esp_data["scenes"][0]["cameraExport"]["logarithmic"],
             "cameraExport.modelVersion": esp_data["scenes"][0]["cameraExport"]["modelVersion"],
         }
-
+        esp_classification = dl.Classification(label=esp_label, attributes=esp_attributes)
+        annotations.add(annotation_definition=esp_classification)
 
         # Export Annotations
         annotations_filepath = str(annotations_path.joinpath(f"{pathlib.Path(image_relative_path).stem}.json"))
@@ -256,6 +264,10 @@ def upload_dataset(dataset: dl.Dataset, data_path: str, num_images: int):
             attribute_type=str(attribute_type),
             scope=csv_label_list,
         )
+
+    # TODO: Updating YAML attributes
+
+    # TODO: Updating ESP attributes
 
 
 def main():
