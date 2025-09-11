@@ -321,7 +321,8 @@ def upload_dataset(dataset: dl.Dataset, data_path: str, num_images: int):
         dataset.items.upload(local_path=image_full_path, local_annotations_path=annotations_filepath, overwrite=True)
 
     csv_label_list = list(csv_labels)
-    dataset.update_labels(label_list=csv_label_list, upsert=True)
+    all_labels = csv_label_list + [yaml_label, esp_label]
+    dataset.update_labels(label_list=all_labels, upsert=True)
     ontology = dataset._get_ontology()
 
     # Updating CSV attributes
