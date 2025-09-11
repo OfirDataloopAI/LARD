@@ -198,7 +198,7 @@ def upload_dataset(dataset: dl.Dataset, data_path: str, num_images: int):
     csv_labels = set()
 
     # Make annotations path
-    annotations_path = pathlib.Path(data_path).joinpath("annotations")
+    annotations_path = pathlib.Path(data_path).joinpath("annotations_V1")
     os.makedirs(annotations_path, exist_ok=True)
 
     csv_filepath = pathlib.Path(data_path).joinpath(f"{pathlib.Path(data_path).stem}.csv")

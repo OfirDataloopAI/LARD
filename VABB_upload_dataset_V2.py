@@ -1,0 +1,114 @@
+import os
+import pathlib
+import dtlpy as dl
+import pandas as pd
+import json
+import random
+
+######################
+# CSV Attributes map #
+######################
+csv_attributes_types_map = {
+    "airport": dl.AttributesTypes.FREE_TEXT,
+    "runway": dl.AttributesTypes.NUMBER,
+    # "time_to_landing": dl.AttributesTypes.FREE_TEXT,
+    # "weather": dl.AttributesTypes.FREE_TEXT,
+    # "night": dl.AttributesTypes.FREE_TEXT,
+    "time": dl.AttributesTypes.FREE_TEXT,
+    "slant_distance": dl.AttributesTypes.NUMBER,
+    "along_track_distance": dl.AttributesTypes.NUMBER,
+    "height_above_runway": dl.AttributesTypes.NUMBER,
+    "lateral_path_angle": dl.AttributesTypes.NUMBER,
+    "vertical_path_angle": dl.AttributesTypes.NUMBER,
+    "yaw": dl.AttributesTypes.NUMBER,
+    "pitch": dl.AttributesTypes.NUMBER,
+    "roll": dl.AttributesTypes.NUMBER,
+    "watermark_height": dl.AttributesTypes.NUMBER,
+    "x_A": dl.AttributesTypes.NUMBER,
+    "y_A": dl.AttributesTypes.NUMBER,
+    "x_B": dl.AttributesTypes.NUMBER,
+    "y_B": dl.AttributesTypes.NUMBER,
+    "x_C": dl.AttributesTypes.NUMBER,
+    "y_C": dl.AttributesTypes.NUMBER,
+    "x_D": dl.AttributesTypes.NUMBER,
+    "y_D": dl.AttributesTypes.NUMBER,
+}
+
+
+def sort_function(x: pathlib.Path):
+    path_components = x.stem.split("_")[1:]
+    image_number = "".join(path_components)
+    return int(image_number)
+
+
+def upload_dataset(dataset: dl.Dataset, data_path: str, images_indices: list[int]):
+    csv_labels = set()
+
+    # Make annotations path
+    annotations_path = pathlib.Path(data_path).joinpath("annotations_V2")
+    os.makedirs(annotations_path, exist_ok=True)
+
+    csv_filepath = pathlib.Path(data_path).joinpath(f"{pathlib.Path(data_path).stem}.csv")
+    csv_data = pd.read_csv(csv_filepath, delimiter=";")
+
+    image_filepaths = pathlib.Path(data_path).joinpath("images").glob("*.jpeg")
+    image_filepaths = sorted(image_filepaths, key=sort_function)
+    for image_idx in images_indices:
+        annotations = dl.AnnotationCollection()
+        image_full_path = str(image_filepaths[image_idx])
+        image_relative_path = str(pathlib.Path(image_full_path).relative_to(data_path)).replace("\\", "/")
+
+        image_row_data = None
+        for index, row in csv_data.iterrows():
+            if row["image"] == image_relative_path:
+                image_row_data = row
+                break
+        if image_row_data is None:
+            raise ValueError(f"Image {image_relative_path} not found in csv data")
+
+        #######################
+        # Annotation from CSV #
+        #######################
+        csv_label = image_row_data["type"]
+        csv_labels.add(csv_label)
+        csv_metadata = {"user": {}}
+        for attribute_key_name in csv_attributes_types_map.keys():
+            csv_metadata["user"][attribute_key_name] = image_row_data[attribute_key_name]
+        csv_classification = dl.Classification(label=csv_label)
+        annotations.add(annotation_definition=csv_classification)
+
+        # Export Annotations
+        annotations_filepath = str(annotations_path.joinpath(f"{pathlib.Path(image_relative_path).stem}.json"))
+        with open(annotations_filepath, "w") as f:
+            json.dump(annotations.to_json(), f)
+
+        dataset.items.upload(
+            local_path=image_full_path,
+            local_annotations_path=annotations_filepath,
+            item_metadata=csv_metadata,
+            overwrite=True,
+        )
+
+    csv_label_list = list(csv_labels)
+    dataset.update_labels(label_list=csv_label_list, upsert=True)
+
+
+def main():
+    """
+    Notice:
+    - You need to download "LARD_train_VABB.zip" from: https://share.deel.ai/s/3ZyWamJWrqzCf74
+    - Extract the zip to the folder "./downloads"
+    """
+    dataset_id = "68c2f75b208940f21de1d110"
+
+    dataset = dl.datasets.get(dataset_id=dataset_id)
+    data_paths = ["downloads/LARD_train_VABB", "downloads/LARD_train_VABB_scenarios"]
+    images_sample_size = 100
+    for data_path in data_paths:
+        images_max_index = len(list(pathlib.Path(data_path).joinpath("images").glob("*.jpeg")))
+        images_indices = random.sample(range(images_max_index), images_sample_size)
+        upload_dataset(dataset, data_path, images_indices)
+
+
+if __name__ == "__main__":
+    main()
