@@ -114,25 +114,24 @@ def upload_dataset(dataset: dl.Dataset, data_path: str, num_images: int):
         yaml_label = "yaml_data"
         yaml_attributes = {
             # "airport": yaml_data["airport"],
-            "image.fov": yaml_data["image"]["fov"],
-            # "image.watermark_height": yaml_data["image"]["watermark_height"],
+            "fov": yaml_data["image"]["fov"],
+            # "watermark_height": yaml_data["image"]["watermark_height"],
         }
-        for pose_idx, pose_info in enumerate(yaml_data["poses"]):
-            if pose_idx == image_idx:
-                # yaml_attributes["poses.airport"] = pose_info["airport"]
-                yaml_attributes["poses.pose.0"] = pose_info["pose"][0]
-                yaml_attributes["poses.pose.1"] = pose_info["pose"][1]
-                yaml_attributes["poses.pose.2"] = pose_info["pose"][2]
-                yaml_attributes["poses.pose.3"] = pose_info["pose"][3]
-                yaml_attributes["poses.pose.4"] = pose_info["pose"][4]
-                yaml_attributes["poses.pose.5"] = pose_info["pose"][5]
-                # yaml_attributes["poses.runway"] = pose_info["runway"]
-                # yaml_attributes["poses.time.day"] = pose_info["time"]["day"]
-                # yaml_attributes["poses.time.hour"] = pose_info["time"]["hour"]
-                # yaml_attributes["poses.time.minute"] = pose_info["time"]["minute"]
-                # yaml_attributes["poses.time.month"] = pose_info["time"]["month"]
-                # yaml_attributes["poses.time.second"] = pose_info["time"]["second"]
-                # yaml_attributes["poses.time.year"] = pose_info["time"]["year"]
+        pose_info = yaml_data["poses"][image_idx]
+        # yaml_attributes["poses.airport"] = pose_info["airport"]
+        yaml_attributes["pose.0"] = pose_info["pose"][0]
+        yaml_attributes["pose.1"] = pose_info["pose"][1]
+        yaml_attributes["pose.2"] = pose_info["pose"][2]
+        yaml_attributes["pose.3"] = pose_info["pose"][3]
+        yaml_attributes["pose.4"] = pose_info["pose"][4]
+        yaml_attributes["pose.5"] = pose_info["pose"][5]
+        # yaml_attributes["runway"] = pose_info["runway"]
+        # yaml_attributes["time.day"] = pose_info["time"]["day"]
+        # yaml_attributes["time.hour"] = pose_info["time"]["hour"]
+        # yaml_attributes["time.minute"] = pose_info["time"]["minute"]
+        # yaml_attributes["time.month"] = pose_info["time"]["month"]
+        # yaml_attributes["time.second"] = pose_info["time"]["second"]
+        # yaml_attributes["time.year"] = pose_info["time"]["year"]
         classification = dl.Classification(label=yaml_label, attributes=yaml_attributes)
         annotations.add(annotation_definition=classification)
 
@@ -147,17 +146,75 @@ def upload_dataset(dataset: dl.Dataset, data_path: str, num_images: int):
         esp_label = "esp_data"
         esp_attributes = {
             "modelVersion": esp_data["modelVersion"],
-            "settings.frameRate": esp_data["settings"]["frameRate"],
-            "settings.duration": esp_data["settings"]["duration"],
-            "settings.timeFormat": esp_data["settings"]["timeFormat"],
-            "scenes.animationModel.roving": esp_data["scenes"][0]["animationModel"]["roving"],
-            "scenes.animationModel.logarithmic": esp_data["scenes"][0]["animationModel"]["logarithmic"],
-            "scenes.animationModel.groupedPosition": esp_data["scenes"][0]["animationModel"]["groupedPosition"],
+            "frameRate": esp_data["settings"]["frameRate"],
+            "duration": esp_data["settings"]["duration"],
+            "timeFormat": esp_data["settings"]["timeFormat"],
+            "animationModel.roving": esp_data["scenes"][0]["animationModel"]["roving"],
+            "animationModel.logarithmic": esp_data["scenes"][0]["animationModel"]["logarithmic"],
+            "animationModel.groupedPosition": esp_data["scenes"][0]["animationModel"]["groupedPosition"],
             # 'attributes' placeholder
+            "longitude.relative": esp_data["scenes"][0]["attributes"][0]["attributes"][0]["attributes"][0]["attributes"][0]["value"]["relative"],
+            "longitude.time": esp_data["scenes"][0]["attributes"][0]["attributes"][0]["attributes"][0]["attributes"][0]["keyframes"][image_idx]["time"],
+            "longitude.value": esp_data["scenes"][0]["attributes"][0]["attributes"][0]["attributes"][0]["attributes"][0]["keyframes"][image_idx]["value"],
+
+            "latitude.relative": esp_data["scenes"][0]["attributes"][0]["attributes"][0]["attributes"][0]["attributes"][1]["value"]["relative"],
+            "latitude.time": esp_data["scenes"][0]["attributes"][0]["attributes"][0]["attributes"][0]["attributes"][1]["keyframes"][image_idx]["time"],
+            "latitude.value": esp_data["scenes"][0]["attributes"][0]["attributes"][0]["attributes"][0]["attributes"][1]["keyframes"][image_idx]["value"],
+
+            "altitude.relative": esp_data["scenes"][0]["attributes"][0]["attributes"][0]["attributes"][0]["attributes"][2]["value"]["relative"],
+            "altitude.logarithmic": esp_data["scenes"][0]["attributes"][0]["attributes"][0]["attributes"][0]["attributes"][2]["value"]["logarithmic"],
+            "altitude.time": esp_data["scenes"][0]["attributes"][0]["attributes"][0]["attributes"][0]["attributes"][2]["keyframes"][image_idx]["time"],
+            "altitude.value": esp_data["scenes"][0]["attributes"][0]["attributes"][0]["attributes"][0]["attributes"][2]["keyframes"][image_idx]["value"],
+
+            "cameraTargetEffect.type": esp_data["scenes"][0]["attributes"][0]["attributes"][0]["attributes"][1]["attributes"][0]["type"],
+            # UNKNOWN format #
+            # "cameraTargetEffect.value":
+            # "cameraTargetEffect.longitudePOI":
+            # "cameraTargetEffect.latitudePOI":
+            # "cameraTargetEffect.altitudePOI":
+            # "cameraTargetEffect.altitudePOI.logarithmic":
+            # "cameraTargetEffect.influence":
+
+            "rotationX.maxValueRange": esp_data["scenes"][0]["attributes"][0]["attributes"][2]["attributes"][0]["value"]["maxValueRange"],
+            "rotationX.minValueRange": esp_data["scenes"][0]["attributes"][0]["attributes"][2]["attributes"][0]["value"]["minValueRange"],
+            "rotationX.relative": esp_data["scenes"][0]["attributes"][0]["attributes"][2]["attributes"][0]["value"]["relative"],
+            "rotationX.time": esp_data["scenes"][0]["attributes"][0]["attributes"][2]["attributes"][0]["keyframes"][image_idx]["time"],
+            "rotationX.value": esp_data["scenes"][0]["attributes"][0]["attributes"][2]["attributes"][0]["keyframes"][image_idx]["value"],
+
+            "rotationY.maxValueRange": esp_data["scenes"][0]["attributes"][0]["attributes"][2]["attributes"][1]["value"]["maxValueRange"],
+            "rotationY.minValueRange": esp_data["scenes"][0]["attributes"][0]["attributes"][2]["attributes"][1]["value"]["minValueRange"],
+            "rotationY.relative": esp_data["scenes"][0]["attributes"][0]["attributes"][2]["attributes"][1]["value"]["relative"],
+            "rotationY.time": esp_data["scenes"][0]["attributes"][0]["attributes"][2]["attributes"][1]["keyframes"][image_idx]["time"],
+            "rotationY.value": esp_data["scenes"][0]["attributes"][0]["attributes"][2]["attributes"][1]["keyframes"][image_idx]["value"],
+
+            "rotationZ.maxValueRange": esp_data["scenes"][0]["attributes"][0]["attributes"][2]["attributes"][2]["value"]["maxValueRange"],
+            "rotationZ.minValueRange": esp_data["scenes"][0]["attributes"][0]["attributes"][2]["attributes"][2]["value"]["minValueRange"],
+            "rotationZ.relative": esp_data["scenes"][0]["attributes"][0]["attributes"][2]["attributes"][2]["value"]["relative"],
+            "rotationZ.time": esp_data["scenes"][0]["attributes"][0]["attributes"][2]["attributes"][2]["keyframes"][image_idx]["time"],
+            "rotationZ.value": esp_data["scenes"][0]["attributes"][0]["attributes"][2]["attributes"][2]["keyframes"][image_idx]["value"],
+
+            "fov.relative": esp_data["scenes"][0]["attributes"][0]["attributes"][3]["attributes"][0]["value"]["relative"],
+            "fov.time": esp_data["scenes"][0]["attributes"][0]["attributes"][3]["attributes"][0]["keyframes"][image_idx]["time"],
+            "fov.value": esp_data["scenes"][0]["attributes"][0]["attributes"][3]["attributes"][0]["keyframes"][image_idx]["value"],
+
+            # UNKNOWN format #
+            # "exposure.relative": esp_data["scenes"][0]["attributes"][0]["attributes"][3]["attributes"][1]["value"]["relative"],
+            # "exposure.time": esp_data["scenes"][0]["attributes"][0]["attributes"][3]["attributes"][1]["keyframes"][image_idx]["time"],
+            # "exposure.value": esp_data["scenes"][0]["attributes"][0]["attributes"][3]["attributes"][1]["keyframes"][image_idx]["value"],
+
+            # UNKNOWN format #
+            # "aperture.relative": esp_data["scenes"][0]["attributes"][0]["attributes"][3]["attributes"][2]["value"]["relative"],
+            # "aperture.time": esp_data["scenes"][0]["attributes"][0]["attributes"][3]["attributes"][2]["keyframes"][image_idx]["time"],
+            # "aperture.value": esp_data["scenes"][0]["attributes"][0]["attributes"][3]["attributes"][2]["keyframes"][image_idx]["value"],
+            
+            # UNKNOWN format #
+            # "minFocusLength.relative": esp_data["scenes"][0]["attributes"][0]["attributes"][3]["attributes"][3]["value"]["relative"],
+            # "minFocusLength.time": esp_data["scenes"][0]["attributes"][0]["attributes"][3]["attributes"][3]["keyframes"][image_idx]["time"],
+            # "minFocusLength.value": esp_data["scenes"][0]["attributes"][0]["attributes"][3]["attributes"][3]["keyframes"][image_idx]["value"],
 
             # 'attributes' placeholder
-            "scenes.cameraExport.logarithmic": esp_data["scenes"][0]["cameraExport"]["logarithmic"],
-            "scenes.cameraExport.modelVersion": esp_data["scenes"][0]["cameraExport"]["modelVersion"],
+            "cameraExport.logarithmic": esp_data["scenes"][0]["cameraExport"]["logarithmic"],
+            "cameraExport.modelVersion": esp_data["scenes"][0]["cameraExport"]["modelVersion"],
         }
 
 
