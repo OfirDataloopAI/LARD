@@ -107,7 +107,7 @@ def upload_dataset(dataset: dl.Dataset, data_path: str, num_images: int):
         # Annotation from YAML #
         ########################
         yaml_filepath = pathlib.Path(data_path).joinpath(f"{pathlib.Path(data_path).stem}_scenarios").joinpath(
-            f"{pathlib.Path(image_relative_path).stem.rsplit("_", 1)[0]}.yaml"
+            f"{pathlib.Path(image_relative_path).stem.rsplit('_', 1)[0]}.yaml"
         )
         with open(yaml_filepath, "r") as f:
             yaml_data = yaml.safe_load(f)
