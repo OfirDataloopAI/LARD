@@ -341,7 +341,7 @@ def upload_dataset(dataset: dl.Dataset, data_path: str, num_images: int):
 def main():
     dataset_id = "68c28dae5d72d76d05b2ea79"
     data_path = "downloads/LARD_train_VABB"
-    num_images = 1
+    num_images = 10
 
     dataset = dl.datasets.get(dataset_id=dataset_id)
     upload_dataset(dataset, data_path, num_images)
