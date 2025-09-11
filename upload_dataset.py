@@ -12,7 +12,7 @@ def sort_function(x: pathlib.Path):
 
 
 def upload_dataset(dataset: dl.Dataset, data_path: str, num_images: int):
-    attributes_map = {
+    attributes_types_map = {
         "airport": dl.AttributesTypes.FREE_TEXT,
         "runway": dl.AttributesTypes.NUMBER,
         # "time_to_landing": dl.AttributesTypes.FREE_TEXT,
@@ -36,6 +36,31 @@ def upload_dataset(dataset: dl.Dataset, data_path: str, num_images: int):
         "y_C": dl.AttributesTypes.NUMBER,
         "x_D": dl.AttributesTypes.NUMBER,
         "y_D": dl.AttributesTypes.NUMBER,
+    }
+    attributes_keys_map = {
+        "airport": 1,
+        "runway": 2,
+        # "time_to_landing": -1,
+        # "weather": -1,
+        # "night": -1,
+        "time": 3,
+        "slant_distance": 4,
+        "along_track_distance": 5,
+        "height_above_runway": 6,
+        "lateral_path_angle": 7,
+        "vertical_path_angle": 8,
+        "yaw": 9,
+        "pitch": 10,
+        "roll": 11,
+        "watermark_height": 12,
+        "x_A": 13,
+        "y_A": 14,
+        "x_B": 15,
+        "y_B": 16,
+        "x_C": 17,
+        "y_C": 18,
+        "x_D": 19,
+        "y_D": 20,
     }
     labels = set()
 
@@ -64,11 +89,12 @@ def upload_dataset(dataset: dl.Dataset, data_path: str, num_images: int):
         label = image_row_data["type"]
         labels.add(label)
         attributes = {}
-        for key in attributes_map.keys():
-            attributes[key] = image_row_data[key]
+        for attribute_key_id, attribute_key_name in attributes_keys_map.items():
+            attributes[attribute_key_id] = image_row_data[attribute_key_name]
         classification = dl.Classification(label=label, attributes=attributes)
         annotations.add(annotation_definition=classification)
 
+        # Export Annotations
         annotations_filepath = str(annotations_path.joinpath(f"{pathlib.Path(image_relative_path).stem}.json"))
         with open(annotations_filepath, "w") as f:
             json.dump(annotations.to_json(), f)
@@ -77,9 +103,10 @@ def upload_dataset(dataset: dl.Dataset, data_path: str, num_images: int):
 
     dataset.update_labels(label_list=list(labels), upsert=True)
     ontology = dataset._get_ontology()
-
-    for attribute_key, attribute_type in attributes_map.items():
-        ontology.update_attributes(title=attribute_key, key=attribute_key, attribute_type=attribute_type)
+    for attribute_key_name, attribute_type in attributes_types_map.items():
+        ontology.update_attributes(
+            title=attribute_key_name, key=attributes_keys_map[attribute_key_name], attribute_type=attribute_type
+        )
 
 
 def main():
