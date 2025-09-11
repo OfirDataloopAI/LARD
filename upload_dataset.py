@@ -166,8 +166,8 @@ def upload_dataset(dataset: dl.Dataset, data_path: str, num_images: int):
             "altitude.time": esp_data["scenes"][0]["attributes"][0]["attributes"][0]["attributes"][0]["attributes"][2]["keyframes"][image_idx]["time"],
             "altitude.value": esp_data["scenes"][0]["attributes"][0]["attributes"][0]["attributes"][0]["attributes"][2]["keyframes"][image_idx]["value"],
 
-            "cameraTargetEffect.type": esp_data["scenes"][0]["attributes"][0]["attributes"][0]["attributes"][1]["attributes"][0]["type"],
             # UNKNOWN format #
+            # "cameraTargetEffect.type": esp_data["scenes"][0]["attributes"][0]["attributes"][0]["attributes"][1]["attributes"][0]["type"],
             # "cameraTargetEffect.value":
             # "cameraTargetEffect.longitudePOI":
             # "cameraTargetEffect.latitudePOI":
@@ -198,19 +198,38 @@ def upload_dataset(dataset: dl.Dataset, data_path: str, num_images: int):
             "fov.value": esp_data["scenes"][0]["attributes"][0]["attributes"][3]["attributes"][0]["keyframes"][image_idx]["value"],
 
             # UNKNOWN format #
-            # "exposure.relative": esp_data["scenes"][0]["attributes"][0]["attributes"][3]["attributes"][1]["value"]["relative"],
-            # "exposure.time": esp_data["scenes"][0]["attributes"][0]["attributes"][3]["attributes"][1]["keyframes"][image_idx]["time"],
-            # "exposure.value": esp_data["scenes"][0]["attributes"][0]["attributes"][3]["attributes"][1]["keyframes"][image_idx]["value"],
+            # "exposure":
+            # "aperture":
+            # "minFocusLength":
+
+            "sunVisibility.relative": esp_data["scenes"][0]["attributes"][1]["attributes"][0]["value"]["relative"],
+
+            "worldTime.maxValueRange": esp_data["scenes"][0]["attributes"][1]["attributes"][1]["value"]["maxValueRange"],
+            "worldTime.minValueRange": esp_data["scenes"][0]["attributes"][1]["attributes"][1]["value"]["minValueRange"],
+            "worldTime.relative": esp_data["scenes"][0]["attributes"][1]["attributes"][1]["value"]["relative"],
+            "worldTime.time": esp_data["scenes"][0]["attributes"][1]["attributes"][1]["keyframes"][image_idx]["time"],
+            "worldTime.value": esp_data["scenes"][0]["attributes"][1]["attributes"][1]["keyframes"][image_idx]["value"],
+
+            "cloudVisibility.time": esp_data["scenes"][0]["attributes"][1]["attributes"][1]["attributes"][0]["keyframes"][image_idx]["time"],
+            "cloudVisibility.value": esp_data["scenes"][0]["attributes"][1]["attributes"][1]["attributes"][0]["keyframes"][image_idx]["value"],
 
             # UNKNOWN format #
-            # "aperture.relative": esp_data["scenes"][0]["attributes"][0]["attributes"][3]["attributes"][2]["value"]["relative"],
-            # "aperture.time": esp_data["scenes"][0]["attributes"][0]["attributes"][3]["attributes"][2]["keyframes"][image_idx]["time"],
-            # "aperture.value": esp_data["scenes"][0]["attributes"][0]["attributes"][3]["attributes"][2]["keyframes"][image_idx]["value"],
-            
+            # "cloudopacity":
+            # "cloudheight"
+
+            "clouddate.maxValueRange": esp_data["scenes"][0]["attributes"][1]["attributes"][1]["attributes"][3]["value"]["maxValueRange"],
+            "clouddate.minValueRange": esp_data["scenes"][0]["attributes"][1]["attributes"][1]["attributes"][3]["value"]["minValueRange"],
+            "clouddate.relative": esp_data["scenes"][0]["attributes"][1]["attributes"][1]["attributes"][3]["value"]["relative"],
+
+            "starsEnabled.relative": esp_data["scenes"][0]["attributes"][1]["attributes"][2]["attributes"][0]["value"]["relative"],
+
             # UNKNOWN format #
-            # "minFocusLength.relative": esp_data["scenes"][0]["attributes"][0]["attributes"][3]["attributes"][3]["value"]["relative"],
-            # "minFocusLength.time": esp_data["scenes"][0]["attributes"][0]["attributes"][3]["attributes"][3]["keyframes"][image_idx]["time"],
-            # "minFocusLength.value": esp_data["scenes"][0]["attributes"][0]["attributes"][3]["attributes"][3]["keyframes"][image_idx]["value"],
+            # "seawaterGroup.seawater":
+
+            "seawaterGroup.influence.relative": esp_data["scenes"][0]["attributes"][1]["attributes"][3]["attributes"][1]["value"]["relative"],
+
+            "buildingsEnabled.time": esp_data["scenes"][0]["attributes"][1]["attributes"][4]["keyframes"][image_idx]["time"],
+            "buildingsEnabled.value": esp_data["scenes"][0]["attributes"][1]["attributes"][4]["keyframes"][image_idx]["value"],
 
             # 'attributes' placeholder
             "cameraExport.logarithmic": esp_data["scenes"][0]["cameraExport"]["logarithmic"],
