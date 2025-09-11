@@ -13,6 +13,8 @@ def sort_function(x: pathlib.Path):
 
 
 def upload_dataset(dataset: dl.Dataset, data_path: str, num_images: int):
+    labels = set()
+
     # Make annotations path
     annotations_path = pathlib.Path(data_path).joinpath("annotations")
     os.makedirs(annotations_path, exist_ok=True)
@@ -23,8 +25,8 @@ def upload_dataset(dataset: dl.Dataset, data_path: str, num_images: int):
     image_filepaths = sorted(image_filepaths, key=sort_function)
     for i in range(num_images):
         annotations = dl.AnnotationCollection()
-        image_full_path = pathlib.Path(image_filepaths[i])
-        image_relative_path = str(image_full_path.relative_to(data_path)).replace("\\", "/")
+        image_full_path = str(image_filepaths[i])
+        image_relative_path = str(pathlib.Path(image_full_path).relative_to(data_path)).replace("\\", "/")
 
         image_row_data = None
         for index, row in csv_data.iterrows():
@@ -35,14 +37,17 @@ def upload_dataset(dataset: dl.Dataset, data_path: str, num_images: int):
             raise ValueError(f"Image {image_relative_path} not found in csv data")
 
         label = image_row_data["type"]
+        labels.add(label)
         classification = dl.Classification(label=label)
         annotations.add(annotation_definition=classification)
 
-        annotations_path = annotations_path.joinpath(f"{image_relative_path.stem}.json")
-        with open(annotations_path, "w") as f:
+        annotations_filepath = str(annotations_path.joinpath(f"{pathlib.Path(image_relative_path).stem}.json"))
+        with open(annotations_filepath, "w") as f:
             json.dump(annotations.to_json(), f)
 
-        dataset.items.upload(local_path=image_full_path, local_annotations_path=annotations_path)
+        dataset.items.upload(local_path=image_full_path, local_annotations_path=annotations_filepath)
+
+    dataset.update_labels(labels=list(labels), upsert=True)
 
 
 def main():
