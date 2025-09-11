@@ -1,7 +1,6 @@
 import os
 import pathlib
 import dtlpy as dl
-from dtlpy.entities.annotation_definitions import classification
 import pandas as pd
 import json
 
@@ -36,9 +35,35 @@ def upload_dataset(dataset: dl.Dataset, data_path: str, num_images: int):
         if image_row_data is None:
             raise ValueError(f"Image {image_relative_path} not found in csv data")
 
+        # Annotation from CSV
         label = image_row_data["type"]
         labels.add(label)
-        classification = dl.Classification(label=label)
+        attributes = {
+            "airport": image_row_data["airport"],
+            "runway": image_row_data["runway"],
+            # "time_to_landing": image_row_data["time_to_landing"],
+            # "weather": image_row_data["weather"],
+            # "night": image_row_data["night"],
+            "time": image_row_data["time"],
+            "slant_distance": image_row_data["slant_distance"],
+            "along_track_distance": image_row_data["along_track_distance"],
+            "height_above_runway": image_row_data["height_above_runway"],
+            "lateral_path_angle": image_row_data["lateral_path_angle"],
+            "vertical_path_angle": image_row_data["vertical_path_angle"],
+            "yaw": image_row_data["yaw"],
+            "pitch": image_row_data["pitch"],
+            "roll": image_row_data["roll"],
+            "watermark_height": image_row_data["watermark_height"],
+            "x_A": image_row_data["x_A"],
+            "y_A": image_row_data["y_A"],
+            "x_B": image_row_data["x_B"],
+            "y_B": image_row_data["y_B"],
+            "x_C": image_row_data["x_C"],
+            "y_C": image_row_data["y_C"],
+            "x_D": image_row_data["x_D"],
+            "y_D": image_row_data["y_D"],
+        }
+        classification = dl.Classification(label=label, attributes=attributes)
         annotations.add(annotation_definition=classification)
 
         annotations_filepath = str(annotations_path.joinpath(f"{pathlib.Path(image_relative_path).stem}.json"))
