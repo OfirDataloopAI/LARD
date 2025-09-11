@@ -102,7 +102,12 @@ def main():
     dataset_id = "68c2f75b208940f21de1d110"
 
     dataset = dl.datasets.get(dataset_id=dataset_id)
-    data_paths = ["downloads/LARD_train_VABB", "downloads/LARD_train_VABB_scenarios"]
+    data_paths = [
+        "downloads/LARD_train_BIRK_LFST",
+        "downloads/LARD_train_DAAG_DIAP",
+        "downloads/LARD_train_LPPT_SRLI",
+        "downloads/LARD_train_VABB",
+    ]
     images_sample_size = 100
     for data_path in data_paths:
         images_max_index = len(list(pathlib.Path(data_path).joinpath("images").glob("*.jpeg")))
