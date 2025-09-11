@@ -59,6 +59,18 @@ csv_attributes_keys_map = {
     "y_D": 20,
 }
 
+#######################
+# YAML Attributes map #
+#######################
+yaml_attributes_types_map = {}
+yaml_attributes_keys_map = {}
+
+######################
+# ESP Attributes map #
+######################
+esp_attributes_types_map = {}
+esp_attributes_keys_map = {}
+
 
 def sort_function(x: pathlib.Path):
     path_components = x.stem.split("_")[1:]
@@ -117,22 +129,21 @@ def upload_dataset(dataset: dl.Dataset, data_path: str, num_images: int):
             # "airport": yaml_data["airport"],
             "fov": yaml_data["image"]["fov"],
             # "watermark_height": yaml_data["image"]["watermark_height"],
+            # "poses.airport": yaml_data["poses"][image_idx]["airport"]
+            "pose.0": yaml_data["poses"][image_idx]["pose"][0],
+            "pose.1": yaml_data["poses"][image_idx]["pose"][1],
+            "pose.2": yaml_data["poses"][image_idx]["pose"][2],
+            "pose.3": yaml_data["poses"][image_idx]["pose"][3],
+            "pose.4": yaml_data["poses"][image_idx]["pose"][4],
+            "pose.5": yaml_data["poses"][image_idx]["pose"][5],
+            # "runway": yaml_data["poses"][image_idx]["runway"],
+            # "time.day": yaml_data["poses"][image_idx]["time"]["day"],
+            # "time.hour": yaml_data["poses"][image_idx]["time"]["hour"],
+            # "time.minute": yaml_data["poses"][image_idx]["time"]["minute"],
+            # "time.month": yaml_data["poses"][image_idx]["time"]["month"],
+            # "time.second": yaml_data["poses"][image_idx]["time"]["second"],
+            # "time.year": yaml_data["poses"][image_idx]["time"]["year"],
         }
-        pose_info = yaml_data["poses"][image_idx]
-        # yaml_attributes["poses.airport"] = pose_info["airport"]
-        yaml_attributes["pose.0"] = pose_info["pose"][0]
-        yaml_attributes["pose.1"] = pose_info["pose"][1]
-        yaml_attributes["pose.2"] = pose_info["pose"][2]
-        yaml_attributes["pose.3"] = pose_info["pose"][3]
-        yaml_attributes["pose.4"] = pose_info["pose"][4]
-        yaml_attributes["pose.5"] = pose_info["pose"][5]
-        # yaml_attributes["runway"] = pose_info["runway"]
-        # yaml_attributes["time.day"] = pose_info["time"]["day"]
-        # yaml_attributes["time.hour"] = pose_info["time"]["hour"]
-        # yaml_attributes["time.minute"] = pose_info["time"]["minute"]
-        # yaml_attributes["time.month"] = pose_info["time"]["month"]
-        # yaml_attributes["time.second"] = pose_info["time"]["second"]
-        # yaml_attributes["time.year"] = pose_info["time"]["year"]
         yaml_classification = dl.Classification(label=yaml_label, attributes=yaml_attributes)
         annotations.add(annotation_definition=yaml_classification)
 
