@@ -108,10 +108,13 @@ def main():
         "downloads/LARD_train_LPPT_SRLI",
         "downloads/LARD_train_VABB",
     ]
-    images_sample_size = 100
+    images_sample_size = -1
     for data_path in data_paths:
         images_max_index = len(list(pathlib.Path(data_path).joinpath("images").glob("*.jpeg")))
-        images_indices = random.sample(range(images_max_index), images_sample_size)
+        if images_sample_size == -1:
+            images_indices = range(images_max_index)
+        else:
+            images_indices = random.sample(range(images_max_index), images_sample_size)
         upload_dataset(dataset, data_path, images_indices)
 
 
