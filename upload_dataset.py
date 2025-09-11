@@ -89,7 +89,7 @@ def upload_dataset(dataset: dl.Dataset, data_path: str, num_images: int):
         label = image_row_data["type"]
         labels.add(label)
         attributes = {}
-        for attribute_key_id, attribute_key_name in attributes_keys_map.items():
+        for attribute_key_name, attribute_key_id in attributes_keys_map.items():
             attributes[attribute_key_id] = image_row_data[attribute_key_name]
         classification = dl.Classification(label=label, attributes=attributes)
         annotations.add(annotation_definition=classification)
