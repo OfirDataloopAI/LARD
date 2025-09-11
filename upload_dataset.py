@@ -70,9 +70,9 @@ def upload_dataset(dataset: dl.Dataset, data_path: str, num_images: int):
         with open(annotations_filepath, "w") as f:
             json.dump(annotations.to_json(), f)
 
-        dataset.items.upload(local_path=image_full_path, local_annotations_path=annotations_filepath)
+        dataset.items.upload(local_path=image_full_path, local_annotations_path=annotations_filepath, overwrite=True)
 
-    dataset.update_labels(labels=list(labels), upsert=True)
+    dataset.update_labels(label_list=list(labels), upsert=True)
 
 
 def main():
