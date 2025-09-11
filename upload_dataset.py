@@ -12,6 +12,31 @@ def sort_function(x: pathlib.Path):
 
 
 def upload_dataset(dataset: dl.Dataset, data_path: str, num_images: int):
+    attributes_map = {
+        "airport": dl.AttributesTypes.FREE_TEXT,
+        "runway": dl.AttributesTypes.NUMBER,
+        # "time_to_landing": dl.AttributesTypes.FREE_TEXT,
+        # "weather": dl.AttributesTypes.FREE_TEXT,
+        # "night": dl.AttributesTypes.FREE_TEXT,
+        "time": dl.AttributesTypes.FREE_TEXT,
+        "slant_distance": dl.AttributesTypes.NUMBER,
+        "along_track_distance": dl.AttributesTypes.NUMBER,
+        "height_above_runway": dl.AttributesTypes.NUMBER,
+        "lateral_path_angle": dl.AttributesTypes.NUMBER,
+        "vertical_path_angle": dl.AttributesTypes.NUMBER,
+        "yaw": dl.AttributesTypes.NUMBER,
+        "pitch": dl.AttributesTypes.NUMBER,
+        "roll": dl.AttributesTypes.NUMBER,
+        "watermark_height": dl.AttributesTypes.NUMBER,
+        "x_A": dl.AttributesTypes.NUMBER,
+        "y_A": dl.AttributesTypes.NUMBER,
+        "x_B": dl.AttributesTypes.NUMBER,
+        "y_B": dl.AttributesTypes.NUMBER,
+        "x_C": dl.AttributesTypes.NUMBER,
+        "y_C": dl.AttributesTypes.NUMBER,
+        "x_D": dl.AttributesTypes.NUMBER,
+        "y_D": dl.AttributesTypes.NUMBER,
+    }
     labels = set()
 
     # Make annotations path
@@ -38,31 +63,9 @@ def upload_dataset(dataset: dl.Dataset, data_path: str, num_images: int):
         # Annotation from CSV
         label = image_row_data["type"]
         labels.add(label)
-        attributes = {
-            "airport": image_row_data["airport"],
-            "runway": image_row_data["runway"],
-            # "time_to_landing": image_row_data["time_to_landing"],
-            # "weather": image_row_data["weather"],
-            # "night": image_row_data["night"],
-            "time": image_row_data["time"],
-            "slant_distance": image_row_data["slant_distance"],
-            "along_track_distance": image_row_data["along_track_distance"],
-            "height_above_runway": image_row_data["height_above_runway"],
-            "lateral_path_angle": image_row_data["lateral_path_angle"],
-            "vertical_path_angle": image_row_data["vertical_path_angle"],
-            "yaw": image_row_data["yaw"],
-            "pitch": image_row_data["pitch"],
-            "roll": image_row_data["roll"],
-            "watermark_height": image_row_data["watermark_height"],
-            "x_A": image_row_data["x_A"],
-            "y_A": image_row_data["y_A"],
-            "x_B": image_row_data["x_B"],
-            "y_B": image_row_data["y_B"],
-            "x_C": image_row_data["x_C"],
-            "y_C": image_row_data["y_C"],
-            "x_D": image_row_data["x_D"],
-            "y_D": image_row_data["y_D"],
-        }
+        attributes = {}
+        for key in attributes_map.keys():
+            attributes[key] = image_row_data[key]
         classification = dl.Classification(label=label, attributes=attributes)
         annotations.add(annotation_definition=classification)
 
@@ -73,6 +76,10 @@ def upload_dataset(dataset: dl.Dataset, data_path: str, num_images: int):
         dataset.items.upload(local_path=image_full_path, local_annotations_path=annotations_filepath, overwrite=True)
 
     dataset.update_labels(label_list=list(labels), upsert=True)
+    ontology = dataset._get_ontology()
+
+    for attribute_key, attribute_type in attributes_map.items():
+        ontology.update_attributes(title=attribute_key, key=attribute_key, attribute_type=attribute_type)
 
 
 def main():
