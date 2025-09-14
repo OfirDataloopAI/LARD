@@ -474,7 +474,7 @@ def upload_dataset(dataset: dl.Dataset, data_path: str, num_images: int):
     for attribute_key_name, attribute_type in esp_attributes_types_map.items():
         ontology.update_attributes(
             title=attribute_key_name,
-            key=esp_attributes_keys_map[attribute_key_name],
+            key=str(esp_attributes_keys_map[attribute_key_name]),
             attribute_type=str(attribute_type),
             scope=[esp_label],
         )
