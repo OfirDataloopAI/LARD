@@ -5,6 +5,8 @@ import pandas as pd
 import json
 import yaml
 
+# TODO: Until DAT-104725 is solved, Using dl.AttributesTypes.FREE_TEXT instead of dl.AttributesTypes.NUMBER
+
 ######################
 # CSV Attributes map #
 ######################
@@ -225,9 +227,13 @@ def upload_dataset(dataset: dl.Dataset, data_path: str, num_images: int):
         csv_label = image_row_data["type"]
         csv_labels.add(csv_label)
         csv_attributes = {}
-        for attribute_key_name, attribute_key_id in csv_attributes_keys_map.items():
-            csv_attributes[attribute_key_id] = image_row_data[attribute_key_name]
-        csv_classification = dl.Classification(label=csv_label, attributes=csv_attributes)
+        for attribute_key_name in csv_attributes_types_map.keys():
+            csv_attributes[attribute_key_name] = image_row_data[attribute_key_name]
+        # Map attributes to keys
+        csv_attributes_mapped = {}
+        for attribute_key, attribute_value in csv_attributes.items():
+            csv_attributes_mapped[csv_attributes_keys_map[attribute_key]] = attribute_value
+        csv_classification = dl.Classification(label=csv_label, attributes=csv_attributes_mapped)
         annotations.add(annotation_definition=csv_classification)
 
         ########################
@@ -260,7 +266,11 @@ def upload_dataset(dataset: dl.Dataset, data_path: str, num_images: int):
             # "time.second": yaml_data["poses"][image_idx]["time"]["second"],
             # "time.year": yaml_data["poses"][image_idx]["time"]["year"],
         }
-        yaml_classification = dl.Classification(label=yaml_label, attributes=yaml_attributes)
+        # Map attributes to keys
+        yaml_attributes_mapped = {}
+        for attribute_key, attribute_value in yaml_attributes.items():
+            yaml_attributes_mapped[yaml_attributes_keys_map[attribute_key]] = attribute_value
+        yaml_classification = dl.Classification(label=yaml_label, attributes=yaml_attributes_mapped)
         annotations.add(annotation_definition=yaml_classification)
 
         #######################
@@ -437,7 +447,11 @@ def upload_dataset(dataset: dl.Dataset, data_path: str, num_images: int):
             "cameraExport.logarithmic": esp_data["scenes"][0]["cameraExport"]["logarithmic"],
             "cameraExport.modelVersion": esp_data["scenes"][0]["cameraExport"]["modelVersion"],
         }
-        esp_classification = dl.Classification(label=esp_label, attributes=esp_attributes)
+        # Map attributes to keys
+        esp_attributes_mapped = {}
+        for attribute_key, attribute_value in esp_attributes.items():
+            esp_attributes_mapped[esp_attributes_keys_map[attribute_key]] = attribute_value
+        esp_classification = dl.Classification(label=esp_label, attributes=esp_attributes_mapped)
         annotations.add(annotation_definition=esp_classification)
 
         # Export Annotations
@@ -456,7 +470,7 @@ def upload_dataset(dataset: dl.Dataset, data_path: str, num_images: int):
     for attribute_key_name, attribute_type in csv_attributes_types_map.items():
         ontology.update_attributes(
             title=attribute_key_name,
-            key=csv_attributes_keys_map[attribute_key_name],
+            key=str(csv_attributes_keys_map[attribute_key_name]),
             attribute_type=str(attribute_type),
             scope=csv_label_list,
         )
@@ -465,7 +479,7 @@ def upload_dataset(dataset: dl.Dataset, data_path: str, num_images: int):
     for attribute_key_name, attribute_type in yaml_attributes_types_map.items():
         ontology.update_attributes(
             title=attribute_key_name,
-            key=yaml_attributes_keys_map[attribute_key_name],
+            key=str(yaml_attributes_keys_map[attribute_key_name]),
             attribute_type=str(attribute_type),
             scope=[yaml_label],
         )
