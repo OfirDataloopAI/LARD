@@ -103,10 +103,14 @@ def main():
 
     dataset = dl.datasets.get(dataset_id=dataset_id)
     data_paths = [
-        "downloads/LARD_train_BIRK_LFST",
-        "downloads/LARD_train_DAAG_DIAP",
-        "downloads/LARD_train_LPPT_SRLI",
-        "downloads/LARD_train_VABB",
+        # "downloads/LARD_train_BIRK_LFST",
+        # "downloads/LARD_train_DAAG_DIAP",
+        "downloads/LARD_train_domain_adaptation",
+        "downloads/LARD_train_KMSY",
+        "downloads/LARD_train_LFMP_LFPO",
+        "downloads/LARD_train_LFQQ",
+        # "downloads/LARD_train_LPPT_SRLI",
+        # "downloads/LARD_train_VABB",
     ]
     images_sample_size = -1
     for data_path in data_paths:
