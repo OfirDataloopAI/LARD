@@ -4,6 +4,7 @@ import dtlpy as dl
 import pandas as pd
 import json
 import yaml
+import numpy as np
 
 # TODO: Until DAT-104725 is solved, Using dl.AttributesTypes.FREE_TEXT instead of dl.AttributesTypes.NUMBER
 
@@ -238,7 +239,12 @@ def upload_dataset(dataset: dl.Dataset, data_path: str, num_images: int):
         csv_labels.add(csv_label)
         csv_attributes = {}
         for attribute_key_name in csv_attributes_types_map.keys():
-            if attribute_key_name not in image_row_data or image_row_data[attribute_key_name] is None:
+            # Check if the attribute is None, empty, or NaN
+            if (
+                (image_row_data.get(attribute_key_name, None) is None) or 
+                (image_row_data[attribute_key_name] == "") or
+                (isinstance(image_row_data[attribute_key_name], float) and np.isnan(image_row_data[attribute_key_name]))
+            ):
                 continue
             if attribute_key_name == "runway":
                 attribute_value = image_row_data[attribute_key_name]
