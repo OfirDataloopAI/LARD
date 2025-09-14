@@ -231,11 +231,11 @@ The `.esp` file produced at *step #2* can be directly loaded into Google Earth S
 
 Organizing the `SAEZ_test_17` folder:
 
-1. In `scenraios` folder, copy the `SAEZ_test_17.esp` and `SAEZ_test_17.json` to the repo dir: `scenraios/SAEZ_test_17/`
+1. In `scenraios` folder, copy the `SAEZ_test_17.esp` and `SAEZ_test_17.json` to the repo dir: `scenraios/SAEZ_test_17/`.
 2. Register to [Google Earth Studio](https://www.google.com/earth/studio/).
 3. Select "File" -> "Import" -> ".esp file" and upload the `SAEZ_test_17.esp` file.
-4. Create a `scenraios/SAEZ_test_17/footage` folder, and export the images from `Google Earth Studio` by clicking on the `Render` button.
-5. 
+4. Click on the `Render` button in the `Google Earth Studio` and export the scene as `.jpeg` image.
+5. The download folder will contain the `footage` and `ImagerySources.txt` needed to be copied to the: `scenraios/SAEZ_test_17/` dir.
 
 ## 2-ter Flight Simulator generation recommendations
 ***[New 01/2025]*** - You can now generate images using Flight simulator in addition to Google Earth. It requires to possess Flight Simulator 2020, and to follow everything explained directly in this associated github repository: [github.com/JeanBriceGinestet/GeoFlight-Replay](https://github.com/JeanBriceGinestet/GeoFlight-Replay).
