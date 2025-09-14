@@ -11,9 +11,6 @@ import random
 csv_attributes_types_map = {
     "airport": dl.AttributesTypes.FREE_TEXT,
     "runway": dl.AttributesTypes.FREE_TEXT,
-    # "time_to_landing": dl.AttributesTypes.FREE_TEXT,
-    # "weather": dl.AttributesTypes.FREE_TEXT,
-    # "night": dl.AttributesTypes.FREE_TEXT,
     "time": dl.AttributesTypes.FREE_TEXT,
     "slant_distance": dl.AttributesTypes.NUMBER,
     "along_track_distance": dl.AttributesTypes.NUMBER,
@@ -32,6 +29,10 @@ csv_attributes_types_map = {
     "y_C": dl.AttributesTypes.NUMBER,
     "x_D": dl.AttributesTypes.NUMBER,
     "y_D": dl.AttributesTypes.NUMBER,
+    # Special
+    "time_to_landing": dl.AttributesTypes.NUMBER,
+    "weather": dl.AttributesTypes.FREE_TEXT,
+    "night": dl.AttributesTypes.YES_NO,
 }
 
 
@@ -49,7 +50,12 @@ def upload_dataset(dataset: dl.Dataset, data_path: str, images_indices: list[int
     annotations_path = pathlib.Path(data_path).joinpath("annotations_V2")
     os.makedirs(annotations_path, exist_ok=True)
 
-    csv_filepath = pathlib.Path(data_path).joinpath(f"{pathlib.Path(data_path).stem}.csv")
+    if pathlib.Path(data_path).name == "LARD_test_real_edge_cases":
+        csv_filepath = pathlib.Path(data_path).joinpath("Test_Real_Edge_Cases.csv")
+    elif pathlib.Path(data_path).name == "LARD_test_real_nominal":
+        csv_filepath = pathlib.Path(data_path).joinpath("Test_Real_Nominal.csv")
+    else:
+        csv_filepath = pathlib.Path(data_path).joinpath(f"{pathlib.Path(data_path).stem}.csv")
     csv_data = pd.read_csv(csv_filepath, delimiter=";")
 
     image_filepaths = pathlib.Path(data_path).joinpath("images").glob("*.jpeg")
@@ -75,6 +81,8 @@ def upload_dataset(dataset: dl.Dataset, data_path: str, images_indices: list[int
         csv_labels.add(csv_label)
         csv_metadata = {"user": {}}
         for attribute_key_name in csv_attributes_types_map.keys():
+            if attribute_key_name not in image_row_data or image_row_data[attribute_key_name] is None:
+                continue
             if attribute_key_name == "runway":
                 attribute_value = image_row_data[attribute_key_name]
                 if isinstance(attribute_value, str):
@@ -95,7 +103,7 @@ def upload_dataset(dataset: dl.Dataset, data_path: str, images_indices: list[int
             local_path=image_full_path,
             local_annotations_path=annotations_filepath,
             item_metadata=csv_metadata,
-            overwrite=True,
+            overwrite=False,
         )
 
     csv_label_list = list(csv_labels)
@@ -112,14 +120,20 @@ def main():
 
     dataset = dl.datasets.get(dataset_id=dataset_id)
     data_paths = [
+        # TRAIN #
         # "downloads/LARD_train_BIRK_LFST",
         # "downloads/LARD_train_DAAG_DIAP",
-        "downloads/LARD_train_domain_adaptation",
-        "downloads/LARD_train_KMSY",
-        "downloads/LARD_train_LFMP_LFPO",
-        "downloads/LARD_train_LFQQ",
+        # "downloads/LARD_train_domain_adaptation",
+        # "downloads/LARD_train_KMSY",
+        # "downloads/LARD_train_LFMP_LFPO",
+        # "downloads/LARD_train_LFQQ",
         # "downloads/LARD_train_LPPT_SRLI",
         # "downloads/LARD_train_VABB",
+
+        # TEST #
+        "downloads/LARD_test_real_edge_cases",
+        "downloads/LARD_test_real_nominal",
+        "downloads/LARD_test_synth",
     ]
     images_sample_size = -1
     for data_path in data_paths:

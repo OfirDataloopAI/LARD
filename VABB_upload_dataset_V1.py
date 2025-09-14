@@ -13,34 +13,32 @@ import yaml
 csv_attributes_types_map = {
     "airport": dl.AttributesTypes.FREE_TEXT,
     "runway": dl.AttributesTypes.FREE_TEXT,
-    # "time_to_landing": dl.AttributesTypes.FREE_TEXT,
-    # "weather": dl.AttributesTypes.FREE_TEXT,
-    # "night": dl.AttributesTypes.FREE_TEXT,
     "time": dl.AttributesTypes.FREE_TEXT,
-    "slant_distance": dl.AttributesTypes.NUMBER,
-    "along_track_distance": dl.AttributesTypes.NUMBER,
-    "height_above_runway": dl.AttributesTypes.NUMBER,
-    "lateral_path_angle": dl.AttributesTypes.NUMBER,
-    "vertical_path_angle": dl.AttributesTypes.NUMBER,
-    "yaw": dl.AttributesTypes.NUMBER,
-    "pitch": dl.AttributesTypes.NUMBER,
-    "roll": dl.AttributesTypes.NUMBER,
-    "watermark_height": dl.AttributesTypes.NUMBER,
-    "x_A": dl.AttributesTypes.NUMBER,
-    "y_A": dl.AttributesTypes.NUMBER,
-    "x_B": dl.AttributesTypes.NUMBER,
-    "y_B": dl.AttributesTypes.NUMBER,
-    "x_C": dl.AttributesTypes.NUMBER,
-    "y_C": dl.AttributesTypes.NUMBER,
-    "x_D": dl.AttributesTypes.NUMBER,
-    "y_D": dl.AttributesTypes.NUMBER,
+    "slant_distance": dl.AttributesTypes.FREE_TEXT,
+    "along_track_distance": dl.AttributesTypes.FREE_TEXT,
+    "height_above_runway": dl.AttributesTypes.FREE_TEXT,
+    "lateral_path_angle": dl.AttributesTypes.FREE_TEXT,
+    "vertical_path_angle": dl.AttributesTypes.FREE_TEXT,
+    "yaw": dl.AttributesTypes.FREE_TEXT,
+    "pitch": dl.AttributesTypes.FREE_TEXT,
+    "roll": dl.AttributesTypes.FREE_TEXT,
+    "watermark_height": dl.AttributesTypes.FREE_TEXT,
+    "x_A": dl.AttributesTypes.FREE_TEXT,
+    "y_A": dl.AttributesTypes.FREE_TEXT,
+    "x_B": dl.AttributesTypes.FREE_TEXT,
+    "y_B": dl.AttributesTypes.FREE_TEXT,
+    "x_C": dl.AttributesTypes.FREE_TEXT,
+    "y_C": dl.AttributesTypes.FREE_TEXT,
+    "x_D": dl.AttributesTypes.FREE_TEXT,
+    "y_D": dl.AttributesTypes.FREE_TEXT,
+    # Special
+    "time_to_landing": dl.AttributesTypes.NUMBER,
+    "weather": dl.AttributesTypes.FREE_TEXT,
+    "night": dl.AttributesTypes.YES_NO,
 }
 csv_attributes_keys_map = {
     "airport": 1,
     "runway": 2,
-    # "time_to_landing": -1,
-    # "weather": -1,
-    # "night": -1,
     "time": 3,
     "slant_distance": 4,
     "along_track_distance": 5,
@@ -59,19 +57,24 @@ csv_attributes_keys_map = {
     "y_C": 18,
     "x_D": 19,
     "y_D": 20,
+    # Special
+    "time_to_landing": 77,
+    "weather": 78,
+    "night": 79
+
 }
 
 #######################
 # YAML Attributes map #
 #######################
 yaml_attributes_types_map = {
-    "fov": dl.AttributesTypes.NUMBER,
-    "pose.0": dl.AttributesTypes.NUMBER,
-    "pose.1": dl.AttributesTypes.NUMBER,
-    "pose.2": dl.AttributesTypes.NUMBER,
-    "pose.3": dl.AttributesTypes.NUMBER,
-    "pose.4": dl.AttributesTypes.NUMBER,
-    "pose.5": dl.AttributesTypes.NUMBER,
+    "fov": dl.AttributesTypes.FREE_TEXT,
+    "pose.0": dl.AttributesTypes.FREE_TEXT,
+    "pose.1": dl.AttributesTypes.FREE_TEXT,
+    "pose.2": dl.AttributesTypes.FREE_TEXT,
+    "pose.3": dl.AttributesTypes.FREE_TEXT,
+    "pose.4": dl.AttributesTypes.FREE_TEXT,
+    "pose.5": dl.AttributesTypes.FREE_TEXT,
 }
 yaml_attributes_keys_map = {
     "fov": 21,
@@ -87,55 +90,55 @@ yaml_attributes_keys_map = {
 # ESP Attributes map #
 ######################
 esp_attributes_types_map = {
-    "modelVersion": dl.AttributesTypes.NUMBER,
-    "frameRate": dl.AttributesTypes.NUMBER,
-    "duration": dl.AttributesTypes.NUMBER,
+    "modelVersion": dl.AttributesTypes.FREE_TEXT,
+    "frameRate": dl.AttributesTypes.FREE_TEXT,
+    "duration": dl.AttributesTypes.FREE_TEXT,
     "timeFormat": dl.AttributesTypes.FREE_TEXT,
     "animationModel.roving": dl.AttributesTypes.YES_NO,
     "animationModel.logarithmic": dl.AttributesTypes.YES_NO,
     "animationModel.groupedPosition": dl.AttributesTypes.YES_NO,
-    "longitude.relative": dl.AttributesTypes.NUMBER,
-    "longitude.time": dl.AttributesTypes.NUMBER,
-    "longitude.value": dl.AttributesTypes.NUMBER,
-    "latitude.relative": dl.AttributesTypes.NUMBER,
-    "latitude.time": dl.AttributesTypes.NUMBER,
-    "latitude.value": dl.AttributesTypes.NUMBER,
-    "altitude.relative": dl.AttributesTypes.NUMBER,
+    "longitude.relative": dl.AttributesTypes.FREE_TEXT,
+    "longitude.time": dl.AttributesTypes.FREE_TEXT,
+    "longitude.value": dl.AttributesTypes.FREE_TEXT,
+    "latitude.relative": dl.AttributesTypes.FREE_TEXT,
+    "latitude.time": dl.AttributesTypes.FREE_TEXT,
+    "latitude.value": dl.AttributesTypes.FREE_TEXT,
+    "altitude.relative": dl.AttributesTypes.FREE_TEXT,
     "altitude.logarithmic": dl.AttributesTypes.YES_NO,
-    "altitude.time": dl.AttributesTypes.NUMBER,
-    "altitude.value": dl.AttributesTypes.NUMBER,
-    "rotationX.maxValueRange": dl.AttributesTypes.NUMBER,
-    "rotationX.minValueRange": dl.AttributesTypes.NUMBER,
-    "rotationX.relative": dl.AttributesTypes.NUMBER,
-    "rotationX.time": dl.AttributesTypes.NUMBER,
-    "rotationX.value": dl.AttributesTypes.NUMBER,
-    "rotationY.relative": dl.AttributesTypes.NUMBER,
-    "rotationY.time": dl.AttributesTypes.NUMBER,
-    "rotationY.value": dl.AttributesTypes.NUMBER,
-    "rotationZ.minValueRange": dl.AttributesTypes.NUMBER,
-    "rotationZ.relative": dl.AttributesTypes.NUMBER,
-    "rotationZ.time": dl.AttributesTypes.NUMBER,
-    "rotationZ.value": dl.AttributesTypes.NUMBER,
-    "fov.relative": dl.AttributesTypes.NUMBER,
-    "fov.time": dl.AttributesTypes.NUMBER,
-    "fov.value": dl.AttributesTypes.NUMBER,
-    "sunVisibility.relative": dl.AttributesTypes.NUMBER,
-    "worldTime.maxValueRange": dl.AttributesTypes.NUMBER,
-    "worldTime.minValueRange": dl.AttributesTypes.NUMBER,
-    "worldTime.relative": dl.AttributesTypes.NUMBER,
-    "worldTime.time": dl.AttributesTypes.NUMBER,
-    "worldTime.value": dl.AttributesTypes.NUMBER,
-    "cloudVisibility.time": dl.AttributesTypes.NUMBER,
-    "cloudVisibility.value": dl.AttributesTypes.NUMBER,
-    "clouddate.maxValueRange": dl.AttributesTypes.NUMBER,
-    "clouddate.minValueRange": dl.AttributesTypes.NUMBER,
-    "clouddate.relative": dl.AttributesTypes.NUMBER,
-    "starsEnabled.relative": dl.AttributesTypes.NUMBER,
-    "seawaterGroup.influence.relative": dl.AttributesTypes.NUMBER,
-    "buildingsEnabled.time": dl.AttributesTypes.NUMBER,
-    "buildingsEnabled.value": dl.AttributesTypes.NUMBER,
+    "altitude.time": dl.AttributesTypes.FREE_TEXT,
+    "altitude.value": dl.AttributesTypes.FREE_TEXT,
+    "rotationX.maxValueRange": dl.AttributesTypes.FREE_TEXT,
+    "rotationX.minValueRange": dl.AttributesTypes.FREE_TEXT,
+    "rotationX.relative": dl.AttributesTypes.FREE_TEXT,
+    "rotationX.time": dl.AttributesTypes.FREE_TEXT,
+    "rotationX.value": dl.AttributesTypes.FREE_TEXT,
+    "rotationY.relative": dl.AttributesTypes.FREE_TEXT,
+    "rotationY.time": dl.AttributesTypes.FREE_TEXT,
+    "rotationY.value": dl.AttributesTypes.FREE_TEXT,
+    "rotationZ.minValueRange": dl.AttributesTypes.FREE_TEXT,
+    "rotationZ.relative": dl.AttributesTypes.FREE_TEXT,
+    "rotationZ.time": dl.AttributesTypes.FREE_TEXT,
+    "rotationZ.value": dl.AttributesTypes.FREE_TEXT,
+    "fov.relative": dl.AttributesTypes.FREE_TEXT,
+    "fov.time": dl.AttributesTypes.FREE_TEXT,
+    "fov.value": dl.AttributesTypes.FREE_TEXT,
+    "sunVisibility.relative": dl.AttributesTypes.FREE_TEXT,
+    "worldTime.maxValueRange": dl.AttributesTypes.FREE_TEXT,
+    "worldTime.minValueRange": dl.AttributesTypes.FREE_TEXT,
+    "worldTime.relative": dl.AttributesTypes.FREE_TEXT,
+    "worldTime.time": dl.AttributesTypes.FREE_TEXT,
+    "worldTime.value": dl.AttributesTypes.FREE_TEXT,
+    "cloudVisibility.time": dl.AttributesTypes.FREE_TEXT,
+    "cloudVisibility.value": dl.AttributesTypes.FREE_TEXT,
+    "clouddate.maxValueRange": dl.AttributesTypes.FREE_TEXT,
+    "clouddate.minValueRange": dl.AttributesTypes.FREE_TEXT,
+    "clouddate.relative": dl.AttributesTypes.FREE_TEXT,
+    "starsEnabled.relative": dl.AttributesTypes.FREE_TEXT,
+    "seawaterGroup.influence.relative": dl.AttributesTypes.FREE_TEXT,
+    "buildingsEnabled.time": dl.AttributesTypes.FREE_TEXT,
+    "buildingsEnabled.value": dl.AttributesTypes.FREE_TEXT,
     "cameraExport.logarithmic": dl.AttributesTypes.YES_NO,
-    "cameraExport.modelVersion": dl.AttributesTypes.NUMBER,
+    "cameraExport.modelVersion": dl.AttributesTypes.FREE_TEXT,
 }
 esp_attributes_keys_map = {
     "modelVersion": 28,
@@ -204,7 +207,12 @@ def upload_dataset(dataset: dl.Dataset, data_path: str, num_images: int):
     annotations_path = pathlib.Path(data_path).joinpath("annotations_V1")
     os.makedirs(annotations_path, exist_ok=True)
 
-    csv_filepath = pathlib.Path(data_path).joinpath(f"{pathlib.Path(data_path).stem}.csv")
+    if pathlib.Path(data_path).name == "LARD_test_real_edge_cases":
+        csv_filepath = pathlib.Path(data_path).joinpath("Test_Real_Edge_Cases.csv")
+    elif pathlib.Path(data_path).name == "LARD_test_real_nominal":
+        csv_filepath = pathlib.Path(data_path).joinpath("Test_Real_Nominal.csv")
+    else:
+        csv_filepath = pathlib.Path(data_path).joinpath(f"{pathlib.Path(data_path).stem}.csv")
     csv_data = pd.read_csv(csv_filepath, delimiter=";")
 
     image_filepaths = pathlib.Path(data_path).joinpath("images").glob("*.jpeg")
@@ -230,6 +238,8 @@ def upload_dataset(dataset: dl.Dataset, data_path: str, num_images: int):
         csv_labels.add(csv_label)
         csv_attributes = {}
         for attribute_key_name in csv_attributes_types_map.keys():
+            if attribute_key_name not in image_row_data or image_row_data[attribute_key_name] is None:
+                continue
             if attribute_key_name == "runway":
                 attribute_value = image_row_data[attribute_key_name]
                 if isinstance(attribute_value, str):
