@@ -12,7 +12,7 @@ import yaml
 ######################
 csv_attributes_types_map = {
     "airport": dl.AttributesTypes.FREE_TEXT,
-    "runway": dl.AttributesTypes.NUMBER,
+    "runway": dl.AttributesTypes.FREE_TEXT,
     # "time_to_landing": dl.AttributesTypes.FREE_TEXT,
     # "weather": dl.AttributesTypes.FREE_TEXT,
     # "night": dl.AttributesTypes.FREE_TEXT,
@@ -190,10 +190,11 @@ esp_attributes_keys_map = {
 }
 
 
-def sort_function(x: pathlib.Path):
-    path_components = x.stem.split("_")[1:]
-    image_number = "".join(path_components)
-    return int(image_number)
+# def sort_function(x: pathlib.Path):
+#     path_components = x.stem.split("_")[1:]
+#     image_number_components = "".join(path_components)
+#     image_number = "".join([char for char in image_number_components if not char.isalpha()])
+#     return int(image_number)
 
 
 def upload_dataset(dataset: dl.Dataset, data_path: str, num_images: int):
@@ -207,7 +208,8 @@ def upload_dataset(dataset: dl.Dataset, data_path: str, num_images: int):
     csv_data = pd.read_csv(csv_filepath, delimiter=";")
 
     image_filepaths = pathlib.Path(data_path).joinpath("images").glob("*.jpeg")
-    image_filepaths = sorted(image_filepaths, key=sort_function)
+    # image_filepaths = sorted(image_filepaths, key=sort_function)
+    image_filepaths = sorted(image_filepaths)
     for image_idx in range(num_images):
         annotations = dl.AnnotationCollection()
         image_full_path = str(image_filepaths[image_idx])
@@ -228,7 +230,14 @@ def upload_dataset(dataset: dl.Dataset, data_path: str, num_images: int):
         csv_labels.add(csv_label)
         csv_attributes = {}
         for attribute_key_name in csv_attributes_types_map.keys():
-            csv_attributes[attribute_key_name] = image_row_data[attribute_key_name]
+            if attribute_key_name == "runway":
+                attribute_value = image_row_data[attribute_key_name]
+                if isinstance(attribute_value, str):
+                    attribute_value = "".join([char for char in attribute_value if not char.isalpha()])
+                attribute_value = int(attribute_value)
+            else:
+                attribute_value = image_row_data[attribute_key_name]
+            csv_attributes[attribute_key_name] = attribute_value
         # Map attributes to keys
         csv_attributes_mapped = {}
         for attribute_key, attribute_value in csv_attributes.items():
@@ -258,7 +267,7 @@ def upload_dataset(dataset: dl.Dataset, data_path: str, num_images: int):
             "pose.3": yaml_data["poses"][image_idx]["pose"][3],
             "pose.4": yaml_data["poses"][image_idx]["pose"][4],
             "pose.5": yaml_data["poses"][image_idx]["pose"][5],
-            # "runway": yaml_data["poses"][image_idx]["runway"],
+            # "runway": str(yaml_data["poses"][image_idx]["runway"]),
             # "time.day": yaml_data["poses"][image_idx]["time"]["day"],
             # "time.hour": yaml_data["poses"][image_idx]["time"]["hour"],
             # "time.minute": yaml_data["poses"][image_idx]["time"]["minute"],
