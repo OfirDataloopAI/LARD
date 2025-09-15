@@ -1,0 +1,71 @@
+{
+    "displayName": "LARD Dataset Uploader",
+    "name": "lard-dataset-uploader",
+    "description": "LARD Dataset Uploader",
+    "attributes": {
+      "Provider": "Dataloop",
+      "Deployed By": "Dataloop",
+      "Category": "Application",
+      "Application Type": [
+        "Pipeline Node"
+      ],
+      "Media Type": [
+        "All Media Types"
+      ],
+      "License": "Apache 2.0"
+    },
+    "version": "1.0.0",
+    "icon": "icon-dl-function",
+    "scope": "project",
+    "components": {
+      "pipelineNodes": [
+        {
+          "invoke": {
+            "type": "function",
+            "namespace": "runner.run"
+          },
+          "name": "LARD Dataset Uploader",
+          "displayName": "LARD Dataset Uploader",
+          "description": "LARD Dataset Uploader",
+          "scope": "node",
+          "configuration": {
+          }
+        }
+      ],
+      "modules": [
+        {
+          "name": "runner-module",
+          "entryPoint": "runner.py",
+          "className": "Runner",
+          "initInputs": [],
+          "functions": [
+            {
+              "name": "run",
+              "description": "Run the LARD Dataset Uploader",
+              "input": [
+              ],
+              "output": [
+              ],
+              "displayName": "LARD Dataset Uploader"
+            }
+          ]
+        }
+      ],
+      "services": [
+        {
+          "name": "runner-service",
+          "moduleName": "runner-module",
+          "runtime": {
+            "podType": "regular-l",
+            "concurrency": 10,
+            "autoscaler": {
+              "minReplicas": 0,
+              "maxReplicas": 2,
+              "queueLength": 10
+            }
+          },
+          "executionTimeout": 3600
+        }
+      ]
+    }
+  }
