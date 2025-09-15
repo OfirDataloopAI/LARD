@@ -8,6 +8,7 @@ from pathlib import Path
 import os
 import zipfile
 import shutil
+import time
 
 
 def download_zip(url: str, output_dir: str):
@@ -38,13 +39,53 @@ def download_zip(url: str, output_dir: str):
         
         with open(file_path, 'wb') as f:
             downloaded = 0
+            start_time = time.time()
+            
             for chunk in response.iter_content(chunk_size=8192):
                 if chunk:
                     f.write(chunk)
                     downloaded += len(chunk)
+                    
                     if total_size > 0:
                         percent = (downloaded / total_size) * 100
-                        print(f"\rProgress: {percent:.1f}% ({downloaded}/{total_size} bytes)", end='', flush=True)
+                        elapsed_time = time.time() - start_time
+                        
+                        # Calculate download speed
+                        if elapsed_time > 0:
+                            speed = downloaded / elapsed_time
+                            speed_mb = speed / (1024 * 1024)
+                        else:
+                            speed_mb = 0
+                        
+                        # Calculate ETA
+                        if speed > 0 and total_size > downloaded:
+                            eta_seconds = (total_size - downloaded) / speed
+                            eta_minutes = int(eta_seconds // 60)
+                            eta_seconds = int(eta_seconds % 60)
+                            eta_str = f"{eta_minutes:02d}:{eta_seconds:02d}"
+                        else:
+                            eta_str = "??:??"
+                        
+                        # Format file sizes
+                        downloaded_mb = downloaded / (1024 * 1024)
+                        total_mb = total_size / (1024 * 1024)
+                        
+                        # Create progress bar
+                        bar_length = 30
+                        filled_length = int(bar_length * downloaded // total_size)
+                        bar = '█' * filled_length + '-' * (bar_length - filled_length)
+                        
+                        print(f"\r[{bar}] {percent:5.1f}% | {downloaded_mb:6.1f}MB/{total_mb:6.1f}MB | {speed_mb:5.1f}MB/s | ETA: {eta_str}", end='', flush=True)
+                    else:
+                        # If we don't know total size, just show downloaded amount
+                        downloaded_mb = downloaded / (1024 * 1024)
+                        elapsed_time = time.time() - start_time
+                        if elapsed_time > 0:
+                            speed = downloaded / elapsed_time
+                            speed_mb = speed / (1024 * 1024)
+                        else:
+                            speed_mb = 0
+                        print(f"\rDownloaded: {downloaded_mb:6.1f}MB | Speed: {speed_mb:5.1f}MB/s", end='', flush=True)
         
         print(f"\nDownload completed: {file_path}")
         return str(file_path)
