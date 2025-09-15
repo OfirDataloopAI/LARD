@@ -120,25 +120,26 @@ def upload_dataset(dataset: dl.Dataset, data_path: str, images_indices: list[int
     dataset.update_labels(label_list=csv_label_list, upsert=True)
 
 
-def main():
+def main(dataset_id=None):
     """
     Notice:
     - You need to download "LARD_train_VABB.zip" from: https://share.deel.ai/s/3ZyWamJWrqzCf74
     - Extract the zip to the folder "./downloads"
     """
-    dataset_id = "68c7ce3b768617fbe2033b3c"
+    if dataset_id is None:
+        dataset_id = "68c7ce3b768617fbe2033b3c"
 
     dataset = dl.datasets.get(dataset_id=dataset_id)
     data_paths = [
         # TRAIN #
-        # "downloads/LARD_train_BIRK_LFST",
-        # "downloads/LARD_train_DAAG_DIAP",
-        # "downloads/LARD_train_domain_adaptation",
-        # "downloads/LARD_train_KMSY",
-        # "downloads/LARD_train_LFMP_LFPO",
-        # "downloads/LARD_train_LFQQ",
-        # "downloads/LARD_train_LPPT_SRLI",
-        # "downloads/LARD_train_VABB",
+        "downloads/LARD_train_BIRK_LFST",
+        "downloads/LARD_train_DAAG_DIAP",
+        "downloads/LARD_train_domain_adaptation",
+        "downloads/LARD_train_KMSY",
+        "downloads/LARD_train_LFMP_LFPO",
+        "downloads/LARD_train_LFQQ",
+        "downloads/LARD_train_LPPT_SRLI",
+        "downloads/LARD_train_VABB",
 
         # TEST #
         "downloads/LARD_test_real_edge_cases",

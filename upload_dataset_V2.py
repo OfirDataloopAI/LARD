@@ -116,13 +116,14 @@ def upload_dataset(dataset: dl.Dataset, data_path: str, images_indices: list[int
     dataset.update_labels(label_list=csv_label_list, upsert=True)
 
 
-def main():
+def main(dataset_id=None):
     """
     Notice:
     - You need to download "LARD_train_VABB.zip" from: https://share.deel.ai/s/3ZyWamJWrqzCf74
     - Extract the zip to the folder "./downloads"
     """
-    dataset_id = "68c2f75b208940f21de1d110"
+    if dataset_id is None:
+        dataset_id = "68c2f75b208940f21de1d110"
 
     dataset = dl.datasets.get(dataset_id=dataset_id)
     data_paths = [

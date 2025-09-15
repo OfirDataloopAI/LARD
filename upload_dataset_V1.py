@@ -519,13 +519,14 @@ def upload_dataset(dataset: dl.Dataset, data_path: str, num_images: int):
         )
 
 
-def main():
+def main(dataset_id=None):
     """
     Notice:
     - You need to download "LARD_train_VABB.zip" from: https://share.deel.ai/s/3ZyWamJWrqzCf74
     - Extract the zip to the folder "./downloads"
     """
-    dataset_id = "68c28dae5d72d76d05b2ea79"
+    if dataset_id is None:
+        dataset_id = "68c28dae5d72d76d05b2ea79"
     data_path = "downloads/LARD_train_VABB"
     num_images = 200
     # num_images = len(list(pathlib.Path(data_path).joinpath("images").glob("*.*")))
