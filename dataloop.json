@@ -64,7 +64,7 @@
               "queueLength": 10
             }
           },
-          "executionTimeout": 3600
+          "executionTimeout": 360000
         }
       ]
     }
