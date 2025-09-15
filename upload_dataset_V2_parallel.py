@@ -2,7 +2,6 @@ import os
 import pathlib
 import dtlpy as dl
 import pandas as pd
-import json
 import random
 import numpy as np
 
@@ -59,11 +58,12 @@ def upload_dataset(dataset: dl.Dataset, data_path: str, images_indices: list[int
         csv_filepath = pathlib.Path(data_path).joinpath(f"{pathlib.Path(data_path).stem}.csv")
     csv_data = pd.read_csv(csv_filepath, delimiter=";")
 
-    image_filepaths = pathlib.Path(data_path).joinpath("images").glob("*.jpeg")
+    image_filepaths = pathlib.Path(data_path).joinpath("images").glob("*.*")
     # image_filepaths = sorted(image_filepaths, key=sort_function)
     image_filepaths = sorted(image_filepaths)
+    uploads = []
     for image_idx in images_indices:
-        annotations = dl.AnnotationCollection()
+        # annotations = dl.AnnotationCollection()
         image_full_path = str(image_filepaths[image_idx])
         image_relative_path = str(pathlib.Path(image_full_path).relative_to(data_path)).replace("\\", "/")
 
@@ -97,20 +97,24 @@ def upload_dataset(dataset: dl.Dataset, data_path: str, images_indices: list[int
             else:
                 attribute_value = image_row_data[attribute_key_name]
             csv_metadata["user"][attribute_key_name] = attribute_value
-        csv_classification = dl.Classification(label=csv_label)
-        annotations.add(annotation_definition=csv_classification)
+        # csv_classification = dl.Classification(label=csv_label)
+        # annotations.add(annotation_definition=csv_classification)
 
         # Export Annotations
-        annotations_filepath = str(annotations_path.joinpath(f"{pathlib.Path(image_relative_path).stem}.json"))
-        with open(annotations_filepath, "w") as f:
-            json.dump(annotations.to_json(), f)
+        # annotations_filepath = str(annotations_path.joinpath(f"{pathlib.Path(image_relative_path).stem}.json"))
+        # with open(annotations_filepath, "w") as f:
+        #     json.dump(annotations.to_json(), f)
 
-        dataset.items.upload(
-            local_path=image_full_path,
-            local_annotations_path=annotations_filepath,
-            item_metadata=csv_metadata,
-            overwrite=False,
+        uploads.append(
+            {
+                "local_path": image_full_path,
+                "item_metadata": csv_metadata,
+            }
         )
+
+    dataset.items.upload(
+        local_path=pd.DataFrame(data=uploads)
+    )
 
     csv_label_list = list(csv_labels)
     dataset.update_labels(label_list=csv_label_list, upsert=True)
@@ -122,7 +126,7 @@ def main():
     - You need to download "LARD_train_VABB.zip" from: https://share.deel.ai/s/3ZyWamJWrqzCf74
     - Extract the zip to the folder "./downloads"
     """
-    dataset_id = "68c2f75b208940f21de1d110"
+    dataset_id = "68c7ce3b768617fbe2033b3c"
 
     dataset = dl.datasets.get(dataset_id=dataset_id)
     data_paths = [
@@ -143,7 +147,7 @@ def main():
     ]
     images_sample_size = -1
     for data_path in data_paths:
-        images_max_index = len(list(pathlib.Path(data_path).joinpath("images").glob("*.jpeg")))
+        images_max_index = len(list(pathlib.Path(data_path).joinpath("images").glob("*.*")))
         if images_sample_size == -1:
             images_indices = range(images_max_index)
         else:

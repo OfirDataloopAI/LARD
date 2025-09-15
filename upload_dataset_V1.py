@@ -216,7 +216,7 @@ def upload_dataset(dataset: dl.Dataset, data_path: str, num_images: int):
         csv_filepath = pathlib.Path(data_path).joinpath(f"{pathlib.Path(data_path).stem}.csv")
     csv_data = pd.read_csv(csv_filepath, delimiter=";")
 
-    image_filepaths = pathlib.Path(data_path).joinpath("images").glob("*.jpeg")
+    image_filepaths = pathlib.Path(data_path).joinpath("images").glob("*.*")
     # image_filepaths = sorted(image_filepaths, key=sort_function)
     image_filepaths = sorted(image_filepaths)
     for image_idx in range(num_images):
@@ -528,6 +528,7 @@ def main():
     dataset_id = "68c28dae5d72d76d05b2ea79"
     data_path = "downloads/LARD_train_VABB"
     num_images = 200
+    # num_images = len(list(pathlib.Path(data_path).joinpath("images").glob("*.*")))
 
     dataset = dl.datasets.get(dataset_id=dataset_id)
     upload_dataset(dataset, data_path, num_images)
