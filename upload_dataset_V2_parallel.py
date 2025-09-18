@@ -148,6 +148,7 @@ def main(dataset_id=None):
     ]
     images_sample_size = -1
     for data_path in data_paths:
+        print(f"Uploading dataset: {data_path}")
         images_max_index = len(list(pathlib.Path(data_path).joinpath("images").glob("*.*")))
         if images_sample_size == -1:
             images_indices = range(images_max_index)
